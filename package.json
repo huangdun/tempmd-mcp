@@ -1,6 +1,6 @@
 {
   "name": "tempmd-mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "MCP server for temp.md — publish agent-made artifacts to one stable link that updates in place",
   "license": "MIT",
   "mcpName": "io.github.huangdun/tempmd",

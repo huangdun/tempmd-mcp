@@ -117,6 +117,23 @@ export async function restoreTemp(tempId: string, token: string): Promise<Record
   return (await res.json()) as Record<string, unknown>;
 }
 
+export async function snapshotTemp(
+  tempId: string,
+  token: string,
+  label?: string
+): Promise<Record<string, unknown>> {
+  const res = await fetch(`${API_BASE}/temps/${tempId}/snapshot`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(label ? { label } : {}),
+  });
+  if (!res.ok) throw await parseError(res);
+  return (await res.json()) as Record<string, unknown>;
+}
+
 export async function setComments(tempId: string, token: string, enabled: boolean): Promise<void> {
   const res = await fetch(`${API_BASE}/temps/${tempId}/settings`, {
     method: "PATCH",

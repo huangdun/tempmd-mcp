@@ -35,6 +35,7 @@ No account or API key required — temp.md is anonymous-create-first. Claim a Te
 | `update_temp` | Push a new version behind the same URL (resets the 7-day window) |
 | `get_temp_status` | Check lifecycle: active / cooling / expired / restorable |
 | `restore_temp` | Bring a recently expired Temp back at the same URL |
+| `snapshot_temp` | Freeze the current version as a fixed reference with its own URL |
 | `set_comments` | Toggle pinned visitor comments (Pindrop) on the page |
 | `list_temps` | List Temps recorded in this project |
 

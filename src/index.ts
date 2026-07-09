@@ -8,6 +8,7 @@ import {
   updateTemp,
   getTempStatus,
   restoreTemp,
+  snapshotTemp,
   setComments,
   ApiError,
   type FileInput,
@@ -15,7 +16,7 @@ import {
 import { appendRecord, touchRecord, resolveRecord, readRecords, recordsPath } from "./records.js";
 
 const server = new McpServer(
-  { name: "tempmd", version: "0.1.0" },
+  { name: "tempmd", version: "0.2.0" },
   {
     instructions: `temp.md gives in-progress work one stable public link while it evolves.
 
@@ -24,7 +25,9 @@ Semantics to preserve:
 - Updating a Temp keeps the same URL and resets its 7-day active window. A failed update never breaks the live link.
 - Temps expire intentionally when inactive (48h cooling first) and can be restored within 7 days of expiry.
 - Publish records are stored in the project's .tempmd file; update_temp reads it automatically, so prefer updating an existing Temp over publishing a new one for the same artifact.
-- After a first publish, offer the user the claim link (claimed Temps are managed from the dashboard) and offer to enable pinned comments on the page.`,
+- After a first publish, offer the user the claim link (claimed Temps are managed from the dashboard) and offer to enable pinned comments on the page.
+- Claiming ROTATES the update token: the claim page shows a new token, and the old one stops working. If an update returns 403 after the user claimed, ask them for the new token and update .tempmd.
+- Owners can password-protect a claimed Temp from the dashboard; use snapshot_temp when an exact frozen state matters (sign-offs) — the canonical link stays latest-first.`,
   }
 );
 
@@ -208,6 +211,34 @@ server.registerTool(
         await touchRecord(dir, tempId, result.expiresAt);
       }
       return ok(result);
+    } catch (err) {
+      return fail(err);
+    }
+  }
+);
+
+// ─── snapshot_temp ────────────────────────────────────────────────────────────
+
+server.registerTool(
+  "snapshot_temp",
+  {
+    title: "Freeze a snapshot",
+    description:
+      "Freeze the current version of a Temp as a fixed reference with its own URL — for sign-offs and 'approve exactly this' moments. " +
+      "The canonical link keeps serving the latest version; share the snapshot URL only when exactness matters. " +
+      "Reads credentials from the project's .tempmd file when omitted.",
+    inputSchema: {
+      label: z.string().optional().describe("Optional label for the snapshot, e.g. 'client sign-off v2'"),
+      temp_id: z.string().optional(),
+      update_token: z.string().optional(),
+      project_dir: projectDirSchema,
+    },
+  },
+  async ({ label, temp_id, update_token, project_dir }) => {
+    try {
+      const dir = resolveProjectDir(project_dir);
+      const { tempId, updateToken } = await resolveRecord(dir, temp_id, update_token);
+      return ok(await snapshotTemp(tempId, updateToken, label));
     } catch (err) {
       return fail(err);
     }
