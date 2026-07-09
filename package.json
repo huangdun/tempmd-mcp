@@ -1,0 +1,45 @@
+{
+  "name": "tempmd-mcp",
+  "version": "0.1.0",
+  "description": "MCP server for temp.md — publish agent-made artifacts to one stable link that updates in place",
+  "license": "MIT",
+  "mcpName": "io.github.huangdun/tempmd",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/huangdun/tempmd-mcp.git"
+  },
+  "homepage": "https://temp.md",
+  "type": "module",
+  "bin": {
+    "tempmd-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "temp.md",
+    "publish",
+    "artifacts",
+    "hosting",
+    "claude",
+    "agents"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.4.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
