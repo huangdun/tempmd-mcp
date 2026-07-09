@@ -1,7 +1,7 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.huangdun/tempmd",
-  "description": "Publish agent-made artifacts (HTML, Markdown, CSV, Mermaid) to one stable public link that updates in place. Anonymous publish, activity-based lifecycle, restore after expiry.",
+  "description": "Publish artifacts to one stable public temp.md link that updates in place. No account needed.",
   "version": "0.1.0",
   "websiteUrl": "https://temp.md",
   "repository": {
