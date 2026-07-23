@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
   "name": "io.github.huangdun/tempmd",
   "description": "Publish artifacts to one stable public temp.md link that updates in place. No account needed.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "websiteUrl": "https://temp.md",
   "repository": {
     "url": "https://github.com/huangdun/tempmd-mcp",
@@ -13,7 +13,7 @@
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "tempmd-mcp",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "transport": {
         "type": "stdio"
       },

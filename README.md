@@ -39,6 +39,11 @@ No account or API key required — temp.md is anonymous-create-first. Claim a Te
 | `set_comments` | Toggle pinned visitor comments (Pindrop) on the page |
 | `list_temps` | List Temps recorded in this project |
 
+`publish_temp` and `update_temp` accept `spa_mode: true` for client-routed
+single-page apps. Leave it off for static sites so missing assets return 404.
+Uploads are capped at 10 MB per file, 50 MB per bundle, and 100 files; publish
+and update limits are 60/hour/IP and 120/hour/Temp/IP respectively.
+
 ## How credentials work
 
 `publish_temp` saves a record (Temp ID, URL, update token, expiry) to a `.tempmd` file in the project root. Every other tool reads that file automatically, so an agent can update the same Temp across sessions without you managing tokens. Tokens can also be passed explicitly via `update_token`.

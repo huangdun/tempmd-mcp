@@ -85,13 +85,22 @@ server.registerTool(
       file: z.string().describe("Absolute path to the main artifact file (.html, .md, .csv, .mmd)"),
       additional_files: additionalFilesSchema,
       title: z.string().optional().describe("Display title (defaults to the HTML <title> if present)"),
+      spa_mode: z
+        .boolean()
+        .optional()
+        .describe("Enable index.html fallback for client-routed SPAs; leave false for ordinary static bundles"),
       project_dir: projectDirSchema,
     },
   },
-  async ({ file, additional_files, title, project_dir }) => {
+  async ({ file, additional_files, title, spa_mode, project_dir }) => {
     try {
       const dir = resolveProjectDir(project_dir);
-      const result = await publishTemp(requireAbsolute(file), toFileInputs(additional_files), title);
+      const result = await publishTemp(
+        requireAbsolute(file),
+        toFileInputs(additional_files),
+        title,
+        spa_mode
+      );
       await appendRecord(dir, {
         tempId: result.tempId,
         canonicalUrl: result.canonicalUrl,
@@ -133,10 +142,14 @@ server.registerTool(
       temp_id: z.string().optional().describe("Temp ID (omit to use the project's .tempmd record)"),
       update_token: z.string().optional().describe("Update token (omit to use the project's .tempmd record)"),
       title: z.string().optional(),
+      spa_mode: z
+        .boolean()
+        .optional()
+        .describe("Set SPA index fallback explicitly; omitted preserves the current setting"),
       project_dir: projectDirSchema,
     },
   },
-  async ({ file, additional_files, temp_id, update_token, title, project_dir }) => {
+  async ({ file, additional_files, temp_id, update_token, title, spa_mode, project_dir }) => {
     try {
       const dir = resolveProjectDir(project_dir);
       const { tempId, updateToken } = await resolveRecord(dir, temp_id, update_token);
@@ -145,7 +158,8 @@ server.registerTool(
         updateToken,
         requireAbsolute(file),
         toFileInputs(additional_files),
-        title
+        title,
+        spa_mode
       );
       await touchRecord(dir, tempId, result.expiresAt);
       return ok({

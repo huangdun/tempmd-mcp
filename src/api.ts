@@ -49,7 +49,12 @@ async function parseError(res: Response): Promise<ApiError> {
 // The main file is always stored at index.html in the bundle; its content type
 // (html/markdown/csv/mermaid) is what drives rendering in the resolver, so it
 // must reflect the real source file, not the bundle path.
-async function buildFormData(mainFile: string, additionalFiles: FileInput[], title?: string): Promise<FormData> {
+async function buildFormData(
+  mainFile: string,
+  additionalFiles: FileInput[],
+  title?: string,
+  spaMode?: boolean
+): Promise<FormData> {
   const form = new FormData();
 
   const mainBuf = await readFile(mainFile);
@@ -69,15 +74,17 @@ async function buildFormData(mainFile: string, additionalFiles: FileInput[], tit
   }
 
   if (title) form.set("title", title);
+  if (spaMode !== undefined) form.set("spaMode", String(spaMode));
   return form;
 }
 
 export async function publishTemp(
   mainFile: string,
   additionalFiles: FileInput[],
-  title?: string
+  title?: string,
+  spaMode?: boolean
 ): Promise<PublishResult> {
-  const form = await buildFormData(mainFile, additionalFiles, title);
+  const form = await buildFormData(mainFile, additionalFiles, title, spaMode);
   const res = await fetch(`${API_BASE}/temps`, { method: "POST", body: form });
   if (!res.ok) throw await parseError(res);
   return (await res.json()) as PublishResult;
@@ -88,9 +95,10 @@ export async function updateTemp(
   updateToken: string,
   mainFile: string,
   additionalFiles: FileInput[],
-  title?: string
+  title?: string,
+  spaMode?: boolean
 ): Promise<UpdateResult> {
-  const form = await buildFormData(mainFile, additionalFiles, title);
+  const form = await buildFormData(mainFile, additionalFiles, title, spaMode);
   const res = await fetch(`${API_BASE}/temps/${tempId}`, {
     method: "PUT",
     headers: { Authorization: `Bearer ${updateToken}` },
