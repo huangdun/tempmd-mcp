@@ -1,5 +1,7 @@
 # tempmd-mcp
 
+[![tempmd-mcp MCP server](https://glama.ai/mcp/servers/huangdun/tempmd-mcp/badges/score.svg)](https://glama.ai/mcp/servers/huangdun/tempmd-mcp)
+
 MCP server for [temp.md](https://temp.md) — give agent-made artifacts one stable public link that updates in place.
 
 Publish an HTML, Markdown, CSV, or Mermaid artifact and get a canonical URL like `amber-hill-9eb6.temp.md`. Push new versions behind the same URL — no re-sharing, ever. Temps expire intentionally when the work goes cold (7-day active window, resets on every update) and can be restored within 7 days of expiry.
