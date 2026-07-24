@@ -8,7 +8,17 @@ Publish an HTML, Markdown, CSV, or Mermaid artifact and get a canonical URL like
 
 ## Install
 
-**Claude Code**
+**Remote — no install**
+
+```bash
+claude mcp add --transport http tempmd https://api.temp.md/mcp
+```
+
+Remote MCP accepts inline UTF-8 or base64 files. Anonymous publishing needs no
+credential. To publish directly into an account and use account tools, configure
+the connection with `Authorization: Bearer <tempmd_key_...>`.
+
+**Local stdio — best for filesystem access and larger directories**
 
 ```bash
 claude mcp add tempmd -- npx -y tempmd-mcp
@@ -29,17 +39,21 @@ claude mcp add tempmd -- npx -y tempmd-mcp
 
 No account or API key required — temp.md is anonymous-create-first. Claim a Temp later to keep it.
 
+The remote transport is limited to 10 MiB and 20 inline files per bundle. The
+stdio package uses local paths and supports the full 50 MiB / 100-file bundle.
+
 ## Tools
 
-| Tool | What it does |
-|------|--------------|
-| `publish_temp` | Publish a new artifact, get a stable public URL + update token |
-| `update_temp` | Push a new version behind the same URL (resets the 7-day window) |
-| `get_temp_status` | Check lifecycle: active / cooling / expired / restorable |
-| `restore_temp` | Bring a recently expired Temp back at the same URL |
-| `snapshot_temp` | Freeze the current version as a fixed reference with its own URL |
-| `set_comments` | Toggle pinned visitor comments (Pindrop) on the page |
-| `list_temps` | List Temps recorded in this project |
+| Tool | Local stdio | Remote | What it does |
+|------|:-----------:|:------:|--------------|
+| `publish_temp` | ✓ | ✓ | Publish a new artifact and get a stable public URL |
+| `update_temp` | ✓ | ✓ | Push a new version behind the same URL |
+| `get_temp_status` | ✓ | ✓ | Check lifecycle and restore eligibility |
+| `restore_temp` | ✓ | ✓ | Bring a recently expired Temp back at the same URL |
+| `snapshot_temp` | ✓ | ✓ | Freeze the current version as a fixed reference |
+| `set_comments` | ✓ | ✓ | Toggle pinned visitor comments |
+| `list_temps` | ✓ | ✓ | List local project records or account-owned Temps |
+| `recover_update_token` | — | ✓ | Rotate and recover a lost scoped update token |
 
 `publish_temp` and `update_temp` accept `spa_mode: true` for client-routed
 single-page apps. Leave it off for static sites so missing assets return 404.

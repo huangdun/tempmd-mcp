@@ -1,19 +1,33 @@
 {
-  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-09-29/server.schema.json",
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.huangdun/tempmd",
   "description": "Publish artifacts to one stable public temp.md link that updates in place. No account needed.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "websiteUrl": "https://temp.md",
   "repository": {
     "url": "https://github.com/huangdun/tempmd-mcp",
     "source": "github"
   },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://api.temp.md/mcp",
+      "headers": [
+        {
+          "name": "Authorization",
+          "description": "Optional: Bearer followed by a temp.md account API key for account-owned publishing and account tools",
+          "isRequired": false,
+          "isSecret": true
+        }
+      ]
+    }
+  ],
   "packages": [
     {
       "registryType": "npm",
       "registryBaseUrl": "https://registry.npmjs.org",
       "identifier": "tempmd-mcp",
-      "version": "0.3.0",
+      "version": "0.4.0",
       "transport": {
         "type": "stdio"
       },
